@@ -619,6 +619,8 @@ const MapView = {
 		}).addTo(MapView._instance)
 
 		MapView._instance.on('moveend zoomend', Tools.debounce(Effects.saveMapView, 300))
+		MapView._instance.on('zoom zoomend', Effects.updateZoomIndicator)
+		Effects.updateZoomIndicator()
 		Log.exit()
 	},
 
@@ -814,6 +816,7 @@ const CONFIG = {
 	},
 	defaults: {
 		trackColor: '#404040',
+		waterColor: '#446688',
 		panelCollapsed: false,
 		panelWidth: 300,
 	},
@@ -846,6 +849,7 @@ const $ = {
 	main: {
 		element: DOM.get('main'),
 		map: DOM.getById('map'),
+		zoom: DOM.getById('zoom-indicator'),
 	},
 	panel: {
 		element: DOM.getById('panel'),
@@ -982,6 +986,14 @@ const Effects = {
 			DOM.addClass($.panel.element, 'main__panel--expanded')
 		}
 		Effects.saveSettings()
+	},
+
+	// @b Update zoom indicator
+	//------------------------
+	updateZoomIndicator: () => {
+		if (!MapView._instance) return
+		const zoom = Number((MapView._instance.getZoom()).toFixed(1))
+		DOM.setText($.main.zoom, `Zoom: ${String(zoom).replace('.', ',')}`)
 	},
 
 	// @b Update fullscreen mode (hides header and footer)
@@ -1209,6 +1221,43 @@ const Handlers = {
 		DOM.setText($.panel.globalWeight, `${weight} px`)
 	},
 
+	// @b Import drag over (drop files on the button)
+	//------------------------
+	importDragOver: (e) => {
+		e.preventDefault()
+		e.dataTransfer.dropEffect = 'copy'
+		DOM.addClass($.panel.importButton, 'panel__button--dragover')
+	},
+
+	// @b Import drag leave
+	//------------------------
+	importDragLeave: () => {
+		DOM.removeClass($.panel.importButton, 'panel__button--dragover')
+	},
+
+	// @b Import drop
+	//------------------------
+	importDrop: (e) => {
+		e.preventDefault()
+		DOM.removeClass($.panel.importButton, 'panel__button--dragover')
+
+		const dropped = Array.from(e.dataTransfer.files)
+		const files = dropped.filter((file) => /\.gpx$/i.test(file.name))
+
+		if (files.length === 0) {
+			if (dropped.length > 0) Modal.alert('Nieobsługiwany plik', 'Upuść pliki z rozszerzeniem .gpx.')
+			return
+		}
+
+		Logic.importFiles(files)
+	},
+
+	// @b Prevent the browser from opening files dropped outside the button
+	//------------------------
+	preventFileDrop: (e) => {
+		if (e.dataTransfer?.types?.includes('Files')) e.preventDefault()
+	},
+
 	// @g Track list
 	//------------------------
 	// @b Select track click
@@ -1326,6 +1375,11 @@ const Listeners = {
 		DOM.on($.panel.toggleButton, 'click', Handlers.togglePanelClick)
 		DOM.on($.panel.importButton, 'click', Handlers.importGpxClick)
 		DOM.on($.panel.importInput, 'change', Handlers.importFilesChanged)
+		DOM.on($.panel.importButton, 'dragover', Handlers.importDragOver)
+		DOM.on($.panel.importButton, 'dragleave', Handlers.importDragLeave)
+		DOM.on($.panel.importButton, 'drop', Handlers.importDrop)
+		DOM.on(document, 'dragover', Handlers.preventFileDrop)
+		DOM.on(document, 'drop', Handlers.preventFileDrop)
 		DOM.on($.panel.clearButton, 'click', Handlers.clearAllClick)
 		DOM.on($.panel.globalColor, 'input', Handlers.globalColorInput)
 		DOM.on($.panel.globalRange, 'input', Handlers.globalWeightInput)
