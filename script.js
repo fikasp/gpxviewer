@@ -674,14 +674,14 @@ const Panel = {
 	render: () => {
 		DOM.clear($.panel.list)
 
-		if (STATE.tracks.length === 0) {
-			DOM.create({
-				type: 'li',
-				classes: ['panel__empty'],
-				children: 'Kliknij „Wczytaj”, aby dodać pliki GPX.',
-				parent: $.panel.list,
-			})
-		}
+		// if (STATE.tracks.length === 0) {
+		// 	DOM.create({
+		// 		type: 'li',
+		// 		classes: ['panel__empty'],
+		// 		children: 'Kliknij „Wczytaj”, aby dodać pliki GPX.',
+		// 		parent: $.panel.list,
+		// 	})
+		// }
 
 		STATE.tracks.forEach((track) => {
 			const item = DOM.create({
@@ -730,17 +730,17 @@ const Panel = {
 			// Bottom row: width slider
 			const bottom = DOM.create({ type: 'div', classes: ['panel__item-width'], parent: item })
 
-			const range = DOM.create({
-				type: 'input',
-				classes: ['panel__item-range'],
-				parent: bottom,
-				title: 'Grubość linii',
-			})
 			const label = DOM.create({
 				type: 'span',
 				classes: ['panel__item-weight'],
 				children: `${track.weight} px`,
 				parent: bottom,
+			})
+			const range = DOM.create({
+				type: 'input',
+				classes: ['panel__item-range'],
+				parent: bottom,
+				title: 'Grubość linii',
 			})
 
 			// Input attributes set directly (DOM.create uses `type` for the tag name)
@@ -759,7 +759,7 @@ const Panel = {
 		DOM.setText($.panel.count, STATE.tracks.length)
 	},
 
-	// @b Sync per-track controls (without re-render)
+	// @b Sync per-track controls
 	//------------------------
 	syncControls: () => {
 		STATE.tracks.forEach((track) => {
@@ -787,8 +787,8 @@ const Panel = {
 //========================
 const CONFIG = {
 	map: {
-		center: [52.0, 19.0],
 		zoom: 6,
+		center: [52.0, 19.0],
 		maxZoom: 19,
 		zoomSnap: 0.5,
 		zoomDelta: 0.5,
@@ -800,9 +800,9 @@ const CONFIG = {
 	},
 	track: {
 		opacity: 0.9,
-		defaultWeight: 4,
+		defaultWeight: 5,
 		minWeight: 1,
-		maxWeight: 12,
+		maxWeight: 9,
 	},
 	panel: {
 		minWidth: 300,
