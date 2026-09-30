@@ -91,6 +91,17 @@ body {
 	overflow: hidden;
 	position: relative;
 }
+/* @b Fullscreen */
+/*------------------------*/
+body.fullscreen {
+	--header-height: 0px;
+	--footer-height: 0px;
+}
+
+body.fullscreen header,
+body.fullscreen footer {
+	display: none;
+}
 /*#endregion*/
 /*========================*/
 /*#region @r HEADER */

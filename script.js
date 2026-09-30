@@ -660,8 +660,8 @@ const MapView = {
 		const panelWidth = STATE.panelCollapsed ? 0 : STATE.panelWidth
 
 		MapView._instance.fitBounds(bounds, {
-			paddingTopLeft: [20, CONFIG.map.headerHeight + 20],
-			paddingBottomRight: [panelWidth + 20, CONFIG.map.footerHeight + 20],
+			paddingTopLeft: [20, (STATE.fullscreen ? 0 : CONFIG.map.headerHeight) + 20],
+			paddingBottomRight: [panelWidth + 20, (STATE.fullscreen ? 0 : CONFIG.map.footerHeight) + 20],
 		})
 	},
 }
@@ -678,7 +678,7 @@ const Panel = {
 			DOM.create({
 				type: 'li',
 				classes: ['panel__empty'],
-				children: 'Brak tras. Kliknij „Wczytaj”, aby dodać pliki GPX.',
+				children: 'Kliknij „Wczytaj”, aby dodać pliki GPX.',
 				parent: $.panel.list,
 			})
 		}
@@ -810,7 +810,7 @@ const CONFIG = {
 		minMapWidth: 0,
 	},
 	storage: {
-		settings: 'GPXViewer_settings',
+		settings: 'GPV_settings',
 	},
 	defaults: {
 		trackColor: '#444444',
@@ -831,6 +831,7 @@ const STATE = {
 	mapView: null,
 	globalColor: CONFIG.defaults.trackColor,
 	globalWeight: CONFIG.track.defaultWeight,
+	fullscreen: false,
 	isDragging: false,
 }
 //#endregion
@@ -981,6 +982,28 @@ const Effects = {
 			DOM.addClass($.panel.element, 'main__panel--expanded')
 		}
 		Effects.saveSettings()
+	},
+
+	// @b Update fullscreen mode (hides header and footer)
+	//------------------------
+	updateFullscreen: () => {
+		const isFullscreen =
+			!!document.fullscreenElement ||
+			window.matchMedia('(display-mode: fullscreen)').matches ||
+			(Math.abs(window.innerWidth - screen.width) <= 1 && Math.abs(window.innerHeight - screen.height) <= 1)
+
+		if (isFullscreen === STATE.fullscreen) return
+		STATE.fullscreen = isFullscreen
+
+		if (isFullscreen) {
+			DOM.addClass($.body, 'fullscreen')
+		} else {
+			DOM.removeClass($.body, 'fullscreen')
+		}
+
+		if (MapView._instance) {
+			MapView._instance.invalidateSize({ animate: false })
+		}
 	},
 
 	// @b Apply panel width
@@ -1309,6 +1332,9 @@ const Listeners = {
 		DOM.on($.panel.resizer, 'mousedown', Handlers.resizerMouseDown)
 		// Resize
 		DOM.on(window, 'resize', Tools.debounce(Handlers.windowResize, 150))
+		// Fullscreen
+		DOM.on(window, 'resize', Effects.updateFullscreen)
+		DOM.on(document, 'fullscreenchange', Effects.updateFullscreen)
 		// Mouse
 		DOM.on(document, 'mousemove', Handlers.resizerMouseMove)
 		DOM.on(document, 'mouseup', Handlers.resizerMouseUp)
@@ -1336,6 +1362,7 @@ const App = {
 		Effects.applyPanelWidth()
 		Effects.updatePanelVisibility()
 		Effects.updateFavicon()
+		Effects.updateFullscreen()
 		Log.exit()
 		Log.end()
 	},

@@ -9,6 +9,7 @@ Prosta aplikacja webowa do wyświetlania tras z plików GPX na mapie. Bez framew
 * **Kolor i grubość linii** ustawiane osobno dla każdej trasy (wybór koloru + suwak).
 * **Zmiana koloru i grubości wszystkich tras naraz** — blok „Wszystkie trasy” nad listą. Ustawione wartości są zapamiętywane i stają się domyślnym kolorem i grubością każdej nowo wczytanej trasy.
 * **Usuwanie pojedynczych tras** przyciskiem **×** oraz **Wyczyść** (z potwierdzeniem) usuwające wszystkie.
+* **Tryb pełnoekranowy** (np. F11) ukrywa nagłówek i stopkę — mapa i panel zajmują cały ekran.
 * **Mapa OpenStreetMap** (Leaflet) — bez kluczy API, bez opłat.
 * Trasy **nie są zapamiętywane** — zapisywane są tylko ustawienia (szerokość panelu, ostatni widok mapy, domyślny kolor i grubość tras).
 
@@ -33,7 +34,9 @@ Prosta aplikacja webowa do wyświetlania tras z plików GPX na mapie. Bez framew
 ## ⏱️ Historia wersji
 
 * **v1.2 (2026-09-30):**
-  * Zapamiętywanie domyślnego koloru i grubości tras w `localStorage`; nowo wczytane trasy używają tych wartości.
+  * Ukrywanie nagłówka i stopki w trybie pełnoekranowym.
+  * Zapamiętywanie domyślnego koloru i grubości tras w `localStorage`.
+  * Zoom co 0,5 poziomu.
 
 * **v1.1 (2026-09-30):**
   * Dodanie przycisku „Wyczyść” z oknem potwierdzenia.
