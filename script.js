@@ -813,7 +813,7 @@ const CONFIG = {
 		settings: 'GPV_settings',
 	},
 	defaults: {
-		trackColor: '#444444',
+		trackColor: '#404040',
 		panelCollapsed: false,
 		panelWidth: 300,
 	},
