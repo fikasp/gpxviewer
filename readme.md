@@ -4,14 +4,13 @@ Prosta aplikacja webowa do wyświetlania tras z plików GPX na mapie. Bez framew
 
 ## 🔗 Kluczowe funkcje
 
-* **Wczytywanie wielu plików GPX naraz** — jeden przycisk „Wczytaj”, w oknie wyboru można zaznaczyć dowolną liczbę plików.
+* **Wczytywanie wielu plików GPX** — w oknie wyboru można zaznaczyć dowolną liczbę plików.
 * **Lista tras** w bocznym panelu (nazwa pliku + długość w km), kliknięcie trasy wyśrodkowuje na niej mapę.
 * **Kolor i grubość linii** ustawiane osobno dla każdej trasy (wybór koloru + suwak).
 * **Zmiana koloru i grubości wszystkich tras naraz** — blok „Wszystkie trasy” nad listą. Ustawione wartości są zapamiętywane i stają się domyślnym kolorem i grubością każdej nowo wczytanej trasy.
 * **Usuwanie pojedynczych tras** przyciskiem **×** oraz **Wyczyść** (z potwierdzeniem) usuwające wszystkie.
 * **Tryb pełnoekranowy** (np. F11) ukrywa nagłówek i stopkę — mapa i panel zajmują cały ekran.
 * **Mapa OpenStreetMap** (Leaflet) — bez kluczy API, bez opłat.
-* Trasy **nie są zapamiętywane** — zapisywane są tylko ustawienia (szerokość panelu, ostatni widok mapy, domyślny kolor i grubość tras).
 
 ## 🏛️ Struktura projektu
 
@@ -20,6 +19,13 @@ Prosta aplikacja webowa do wyświetlania tras z plików GPX na mapie. Bez framew
 - `script.js` — logika aplikacji
 - `index.html` — plik główny
 - `README.md` — dokumentacja
+
+## ⚙️ Technologie
+
+* **HTML5 + CSS3**
+* **JavaScript (ES6)**
+* **Leaflet** — biblioteka do interaktywnych map
+* **OpenStreetMap** — źródło kafelków mapowych
 
 ## 📄 Instrukcja użycia
 
